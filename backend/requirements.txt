@@ -20,6 +20,7 @@ requests==2.32.2
 
 # Database (SQLite ORM — built into Python, zero setup)
 sqlalchemy==2.0.30
+pydantic-settings==2.3.0
 
 # CORS (needed so your frontend can talk to this API)
 # Already included in FastAPI

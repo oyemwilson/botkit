@@ -24,13 +24,17 @@ export default function Home() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [sessionId, setSessionId] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [uploadedDocs, setUploadedDocs] = useState<string[]>([])
   const [urlInput, setUrlInput] = useState('')
   const [status, setStatus] = useState<UploadStatus>({ text: '', type: null })
   const [embedOpen, setEmbedOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (window.innerWidth >= 768) setSidebarOpen(true)
+  }, [])
 
   useEffect(() => {
     let sid = localStorage.getItem('chatbot_session_id')
@@ -107,6 +111,7 @@ export default function Home() {
       const data = await uploadPDF(file)
       setUploadedDocs((prev) => [...prev, file.name])
       setStatus({ text: data.message, type: 'success' })
+      if (window.innerWidth < 768) setSidebarOpen(false)
     } catch (err: unknown) {
       setStatus({ text: err instanceof Error ? err.message : 'Upload failed', type: 'error' })
     }
@@ -122,6 +127,7 @@ export default function Home() {
       setUploadedDocs((prev) => [...prev, urlInput])
       setStatus({ text: data.message, type: 'success' })
       setUrlInput('')
+      if (window.innerWidth < 768) setSidebarOpen(false)
     } catch (err: unknown) {
       setStatus({ text: err instanceof Error ? err.message : 'Ingest failed', type: 'error' })
     }
@@ -138,11 +144,22 @@ export default function Home() {
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className={`${
-          sidebarOpen ? 'w-72' : 'w-0 overflow-hidden'
-        } transition-all duration-300 bg-slate-900 text-white flex flex-col flex-shrink-0`}
+        className={`
+          fixed inset-y-0 left-0 z-40
+          md:relative md:inset-auto md:z-auto
+          ${sidebarOpen ? 'translate-x-0 md:w-72' : '-translate-x-full md:translate-x-0 md:w-0 md:overflow-hidden'}
+          w-72 transition-all duration-300 bg-slate-900 text-white flex flex-col flex-shrink-0
+        `}
       >
         <div className="p-5 border-b border-slate-700/60 flex items-center gap-3">
           <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-lg flex-shrink-0">

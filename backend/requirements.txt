@@ -1,0 +1,25 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9       # for file uploads
+python-dotenv==1.0.1          # for .env files
+
+# AI / RAG
+openai==1.30.1
+langchain==0.2.1
+langchain-openai==0.1.8
+langchain-community==0.2.1
+langchain-chroma==0.1.1
+
+# Vector DB (local, no account needed)
+chromadb==0.5.0
+
+# Document loaders
+pypdf==4.2.0                  # PDF reading
+beautifulsoup4==4.12.3        # URL scraping
+requests==2.32.2
+
+# Database (SQLite ORM — built into Python, zero setup)
+sqlalchemy==2.0.30
+
+# CORS (needed so your frontend can talk to this API)
+# Already included in FastAPI
